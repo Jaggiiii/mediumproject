@@ -11,24 +11,12 @@ export const userRouter = new Hono<{
     }
 }>();
 
-
 userRouter.post('/signup', async (c) => {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
     try {
       const body = await c.req.json();
-      const check = await prisma.user.findUnique({
-        where:{
-          email:body.username
-        }
-      }) 
-      if(check){
-        c.status(411)
-        return c.json({
-          message:"email already exists"
-        })
-      }
 
        const {success} = signupInput.safeParse(body);
        if(!success){
@@ -39,10 +27,13 @@ userRouter.post('/signup', async (c) => {
        }
       const user = await prisma.user.create({
         data: {
-          email: body.username,
+          username: body.username,
           password: body.password,
+          name:body.name,
         },
       })
+
+      // console.log(" signup credintails ",user);
       const token = await sign({ id: user.id }, c.env.JWT_SECRET);
       return c.json({
         jwt: token
@@ -50,7 +41,7 @@ userRouter.post('/signup', async (c) => {
     }
     catch (e) {
       console.log(e);
-      c.status(411);
+      c.status(500);
       return c.text("internal error in the code");
     }
   })  
@@ -71,7 +62,7 @@ userRouter.post('/signup', async (c) => {
 
       const user = await prisma.user.findUnique({
         where: {
-          email: body.username,
+          username: body.username,
           password: body.password
         }
       });
@@ -86,7 +77,7 @@ userRouter.post('/signup', async (c) => {
     }
     catch (e) {
       console.log(e);
-      c.status(403);
+      c.status(500);
       return c.json({ error: "internal error in  the code" })
     }
   })

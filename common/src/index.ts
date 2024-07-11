@@ -1,20 +1,20 @@
 import {z} from "zod"
 
- export const signupInput = z.object({
+ export const SignupInput = z.object({
+   name:z.string().optional(),
     username:z.string().email(),
-    password:z.string().min(7),
-    name:z.string().optional()
+    password:z.string().min(7)
  })
 
- export type signupInput = z.infer<typeof signupInput>
+ export type SignupInput = z.infer<typeof SignupInput>
 
 
- export const signinInput  = z.object({
+ export const SigninInput  = z.object({
     username:z.string().email(),
-    password:z.string().min(8)
+    password:z.string().min(7)
  })
 
- export type signinInput = z.infer<typeof signinInput>
+ export type signinInput = z.infer<typeof SigninInput>
 
  export const createBlog = z.object({
   title:z.string(),

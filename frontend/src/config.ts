@@ -1,0 +1,1 @@
+export const Backend_Url =" https://backend.duppalapudijagadeesh5.workers.dev"
