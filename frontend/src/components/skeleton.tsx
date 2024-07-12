@@ -1,4 +1,3 @@
-import { Circle } from "../pages/blogcard"
 
 export const Skeleton = () => {
     return <div>
